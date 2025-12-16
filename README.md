@@ -38,3 +38,34 @@ go run src/main.go
 ```bash
 docker build demoapp --push -t twobrowin/2025-msa-project:demoapp-hw2-0.1
 ```
+
+## ДЗ 3 | Основы работы с Kubernetes
+
+**Цель:** В этом ДЗ вы научитесь создавать минимальный сервис.
+
+**Вариант 1 (С КОДОМ)**
+
+Написать манифесты для деплоя в k8s для этого сервиса.
+
+
+Манифесты должны описывать сущности: Deployment, Service, Ingress.
+
+В Deployment могут быть указаны Liveness, Readiness пробы.
+
+Количество реплик должно быть не меньше 2. Image контейнера должен быть указан с Dockerhub.
+
+
+Хост в ингрессе должен быть arch.homework. В итоге после применения манифестов GET запрос на http://arch.homework/health должен отдавать {“status”: “OK”}.
+
+
+*Задание со звездой:*
+
+В Ingress-е должно быть правило, которое форвардит все запросы с /otusapp/{student name}/* на сервис с rewrite-ом пути. Где {student name} - это имя студента.
+
+Например: curl arch.homework/otusapp/aeugene/health -> рерайт пути на arch.homework/health
+
+### Развёртывание сервиса в k8s
+
+```bash
+kubectl apply -f k8s-manifests
+```
