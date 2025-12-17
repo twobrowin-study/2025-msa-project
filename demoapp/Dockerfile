@@ -16,8 +16,7 @@ RUN go mod download
 
 COPY src src
 
-RUN mkdir -p /app && \
-    go build -ldflags="-s -w" -o /app/main ./src
+RUN go build -ldflags="-s -w" -o /build/main ./src
 
 FROM alpine:3.23
 
@@ -26,9 +25,11 @@ RUN apk update --no-cache && apk add --no-cache ca-certificates
 COPY --from=builder /usr/share/zoneinfo/Europe/Moscow /usr/share/zoneinfo/Europe/Moscow
 ENV TZ=Europe/Moscow
 
+USER 1000:1000
+
 WORKDIR /app
 
-COPY --from=builder /app/main /app/main
+COPY --from=builder /build/main /app/main
 COPY config config
 
 EXPOSE 8000

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: demoapp-hw3
-        image: twobrowin/2025-msa-project:demoapp-hw2-0.1
+        image: twobrowin/2025-msa-project:demoapp-hw2-0.2
         imagePullPolicy: IfNotPresent
 
         ports:

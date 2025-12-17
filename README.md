@@ -36,7 +36,7 @@ go run src/main.go
 ### Сборка и пуш контейнера
 
 ```bash
-docker build demoapp --push -t twobrowin/2025-msa-project:demoapp-hw2-0.1
+docker build demoapp --push -t twobrowin/2025-msa-project:demoapp-hw2-0.2
 ```
 
 ## ДЗ 3 | Основы работы с Kubernetes
