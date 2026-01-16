@@ -183,4 +183,7 @@ kubectl port-forward --namespace otus-2025-msa svc/pg-dev-postgresql 5432:5432
 
 ```bash
 helm upgrade --install -n otus-2025-msa otus-2025-msa-project ./charts -f ./charts/values_dev.yaml
+
+# Port-forward для подключения к Ingress
+kubectl port-forward --namespace nginx-ingress svc/nginx-ingress-nginx-controller 80:80
 ```
