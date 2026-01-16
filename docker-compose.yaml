@@ -1,4 +1,4 @@
-name: twobrowin-study_otus-msa-25_project
+name: otus.ru_tbw_msa-25
 
 services:
   postgres:

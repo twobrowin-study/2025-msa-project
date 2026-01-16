@@ -4,7 +4,7 @@ metadata:
   name: {{ .Release.Name }}
   namespace: {{ .Release.Namespace }}
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    nginx.ingress.kubernetes.io/rewrite-target: {{ .Values.ingress.rewriteTarget }}
 
 spec:
   ingressClassName: nginx
