@@ -1,0 +1,39 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-apply-migrations
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  activeDeadlineSeconds: 60
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ .Release.Name }}-apply-migrations
+    spec:
+      restartPolicy: {{ .Values.migration.restartPolicy }}
+      containers:
+      - name: apply-migrations
+        image: {{ .Values.migration.image }}
+        imagePullPolicy: {{ .Values.migration.imagePullPolicy }}
+
+        env:
+        - name: CONFIG_PATH
+          value: "{{ .Values.container.config.mountPath }}/{{ .Values.container.config.fileName }}"
+        {{ .Values.configuration_secrets_env | toYaml | nindent 8 | trim }}
+        {{ .Values.container.env_extra | toYaml | nindent 8 | trim }}
+        
+        volumeMounts:
+        - name: config
+          mountPath: {{ .Values.container.config.mountPath }}
+          readOnly: true
+
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}
+          items:
+          - key: {{ .Values.container.config.fileName }}
+            path: {{ .Values.container.config.fileName }}
+    

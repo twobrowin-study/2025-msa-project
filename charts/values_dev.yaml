@@ -1,0 +1,55 @@
+migration:
+  image: twobrowin/2025-msa-project:migrate-20260110134623_create_users_table
+  imagePullPolicy: Always
+  restartPolicy: Never
+
+configuration:
+  server:
+    host: "0.0.0.0"
+    port: "8000"
+  db:
+    host: pg-dev-postgresql
+    port: "5432"
+    ssl_insecure: false
+    database: dev
+    username: otus-2025-msa
+
+configuration_secrets_env:
+- name: DB_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: pg-dev
+      key: password
+    
+
+container:
+  image: twobrowin/2025-msa-project:hw4.0.1
+  imagePullPolicy: IfNotPresent
+  
+  config:
+    mountPath: /config
+    fileName: config.yaml
+
+  replicas: 3
+
+  env_extra:
+  - name: TZ
+    value: Europe/Moscow
+
+  resources:
+    requests:
+      memory: "20Mi"
+      cpu: "50m"
+    limits:
+      memory: "100Mi"
+      cpu: "250m"
+
+ingress:
+  rewriteTarget: /$1
+  rules:
+  - host: arch.homework
+    paths:
+    - path: /otusapp/dubrovinen/(.*)$
+  - host: arch.homework
+    paths:
+    - path: /(.*)$
