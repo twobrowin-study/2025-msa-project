@@ -1,0 +1,18 @@
+FROM golang:1.25.5-alpine3.23
+
+RUN apk update --no-cache && apk add --no-cache tzdata
+
+USER 1000:1000
+
+WORKDIR /migrate
+ENV GOCACHE=/migrate/.cache
+
+COPY --chown=1000:1000 go.mod .
+COPY --chown=1000:1000 go.sum .
+
+RUN go mod download
+
+COPY --chown=1000:1000 migrate migrate
+COPY --chown=1000:1000 src src
+
+CMD ["sh", "./migrate/migrate.sh"]

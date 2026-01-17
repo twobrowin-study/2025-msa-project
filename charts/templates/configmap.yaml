@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+data:
+  "{{ .Values.container.config.fileName }}": |
+    {{ .Values.configuration | toYaml | nindent 4 | trim }}

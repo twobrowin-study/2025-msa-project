@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  namespace: {{ .Release.Namespace }}
+
+spec:
+  replicas: {{ .Values.container.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+
+    spec:
+      containers:
+      - name: {{ .Release.Name }}
+        image: {{ .Values.container.image }}
+        imagePullPolicy: {{ .Values.container.imagePullPolicy }}
+
+        env:
+        - name: CONFIG_PATH
+          value: "{{ .Values.container.config.mountPath }}/{{ .Values.container.config.fileName }}"
+        {{ .Values.configuration_secrets_env | toYaml | nindent 8 | trim }}
+        {{ .Values.container.env_extra | toYaml | nindent 8 | trim }}
+
+        ports:
+        - containerPort: {{ .Values.configuration.server.port }}
+          name: service
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.configuration.server.port }}
+          timeoutSeconds: 5
+          initialDelaySeconds: 40
+          periodSeconds: 20
+          failureThreshold: 3
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.configuration.server.port }}
+          timeoutSeconds: 5
+          periodSeconds: 10
+
+        resources:
+          {{ .Values.container.resources | toYaml | nindent 10 | trim }}
+        
+        volumeMounts:
+        - name: config
+          mountPath: {{ .Values.container.config.mountPath }}
+          readOnly: true
+
+      volumes:
+      - name: config
+        configMap:
+          name: {{ .Release.Name }}
+          items:
+          - key: {{ .Values.container.config.fileName }}
+            path: {{ .Values.container.config.fileName }}

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: otus-tbw-msa-25
+version: 1.0.0
+appVersion: 0.0.0

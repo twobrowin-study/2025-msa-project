@@ -7,14 +7,17 @@ ENV GOOS=linux
 
 RUN apk update --no-cache && apk add --no-cache tzdata
 
-WORKDIR /build
+USER 1000:1000
 
-COPY go.mod .
-COPY go.sum .
+WORKDIR /build
+ENV GOCACHE=/build/.cache
+
+COPY --chown=1000:1000 go.mod .
+COPY --chown=1000:1000 go.sum .
 
 RUN go mod download
 
-COPY src src
+COPY --chown=1000:1000 src src
 
 RUN go build -ldflags="-s -w" -o /build/main ./src
 
@@ -30,7 +33,6 @@ USER 1000:1000
 WORKDIR /app
 
 COPY --from=builder /build/main /app/main
-COPY config config
 
 EXPOSE 8000
 
