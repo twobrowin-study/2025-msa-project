@@ -23,7 +23,7 @@ func main() {
 		Name: "bun",
 
 		Commands: []*cli.Command{
-			newDBCommand(migrate.NewMigrator(deps.DB, migrations.Migrations, migrate.WithTemplateData(templateData)), deps),
+			newDBCommand(migrate.NewMigrator(deps.DB.DB, migrations.Migrations, migrate.WithTemplateData(templateData)), deps),
 		},
 	}
 	if err := app.Run(os.Args); err != nil {

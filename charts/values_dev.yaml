@@ -23,7 +23,7 @@ configuration_secrets_env:
     
 
 container:
-  image: twobrowin/2025-msa-project:hw4.0.1
+  image: twobrowin/2025-msa-project:hw5.0.7
   imagePullPolicy: IfNotPresent
   
   config:
@@ -53,3 +53,8 @@ ingress:
   - host: arch.homework
     paths:
     - path: /(.*)$
+
+serviceMonitor:
+  release: prometheus-stack
+  scrapeInterval: 15s
+  metricsPath: /metrics
