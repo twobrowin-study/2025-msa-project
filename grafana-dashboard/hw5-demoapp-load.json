@@ -253,7 +253,7 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(rate(http_requests_total{job=\"$proj\", namespace=\"$ns\", code!~\"5..\"}[$rate_interval])) by (method, handler, code)",
+          "expr": "sum(rate(http_requests_total{job=\"$proj\", namespace=\"$ns\"}[$rate_interval])) by (method, handler, code)",
           "legendFormat": "{{method}} {{handler}} {{code}}",
           "range": true,
           "refId": "A"
@@ -589,8 +589,8 @@
             "uid": "PBFA97CFB590B2093"
           },
           "editorMode": "code",
-          "expr": "sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress=\"$proj\", status!~\"5..\"}[$rate_interval])) by (method, path, status)",
-          "legendFormat": "{{method}} {{path}} {{status}}",
+          "expr": "sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress=\"$proj\"}[$rate_interval])) by (method, status)",
+          "legendFormat": "{{method}} {{status}}",
           "range": true,
           "refId": "A"
         }
@@ -684,8 +684,8 @@
       "targets": [
         {
           "editorMode": "code",
-          "expr": "sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress=\"$proj\", status=~\"5.*\"}[$rate_interval])) by (method, path, status)",
-          "legendFormat": "{{method}} {{path}} {{status}}",
+          "expr": "sum(rate(nginx_ingress_controller_request_duration_seconds_count{ingress=\"$proj\", status=~\"5.*\"}[$rate_interval])) by (method, status)",
+          "legendFormat": "{{method}} {{status}}",
           "range": true,
           "refId": "A"
         }
