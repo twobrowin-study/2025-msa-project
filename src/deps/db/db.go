@@ -7,13 +7,16 @@ import (
 	"github.com/uptrace/bun/dialect/pgdialect"
 	"github.com/uptrace/bun/driver/pgdriver"
 
-	"github.com/sirupsen/logrus"
-
 	"otus.ru/tbw/msa-25/src/deps/config"
+	"otus.ru/tbw/msa-25/src/deps/log"
 )
 
+type DB struct {
+	*bun.DB
+}
+
 // Создание подключения к БД
-func New(log *logrus.Logger, config *config.Config) *bun.DB {
+func New(log *log.Logger, config *config.Config) *DB {
 	log.Info("Creating Postgresql DB connection...")
 
 	pgconn := pgdriver.NewConnector(
@@ -29,5 +32,7 @@ func New(log *logrus.Logger, config *config.Config) *bun.DB {
 		pgdriver.WithWriteTimeout(config.DB.Timeout.Write),
 	)
 
-	return bun.NewDB(sql.OpenDB(pgconn), pgdialect.New(), bun.WithDiscardUnknownColumns())
+	return &DB{
+		DB: bun.NewDB(sql.OpenDB(pgconn), pgdialect.New(), bun.WithDiscardUnknownColumns()),
+	}
 }

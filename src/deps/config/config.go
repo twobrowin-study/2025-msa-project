@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/ilyakaznacheev/cleanenv"
-	"github.com/sirupsen/logrus"
+	"otus.ru/tbw/msa-25/src/deps/log"
 )
 
+// Настройки приложения
 type Config struct {
 	// Настройки сервера
 	Server struct {
@@ -69,7 +70,7 @@ type Config struct {
 	} `yaml:"db" env-prefix:"DB_"`
 }
 
-func New(log *logrus.Logger) *Config {
+func New(log *log.Logger) *Config {
 	config := &Config{}
 
 	config_path, exists := os.LookupEnv("CONFIG_PATH")
@@ -95,7 +96,10 @@ func New(log *logrus.Logger) *Config {
 		}
 	}
 
-	configJSON, _ := json.MarshalIndent(config, "", "  ")
+	configJSON, err := json.MarshalIndent(config, "", "  ")
+	if err != nil {
+		log.Panicf("Something went wrong while cofig structure: %v", err)
+	}
 	log.Debugf("Log config structure for convenience:\n%s", string(configJSON))
 
 	return config

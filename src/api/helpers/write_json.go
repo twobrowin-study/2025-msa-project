@@ -1,8 +1,7 @@
-package api
+package helpers
 
 import (
 	"encoding/json"
-	"fmt"
 	"maps"
 	"net/http"
 
@@ -24,10 +23,4 @@ func WriteJson(w http.ResponseWriter, r *http.Request, status int, data any, hea
 func WriteJsonError(w http.ResponseWriter, r *http.Request, status int, message string, err error, deps *deps.Deps) {
 	deps.Log.Errorf("%s in %s %s request: %v", message, r.Method, r.URL.Path, err)
 	WriteJson(w, r, status, map[string]any{"code": status, "message": message}, nil, deps)
-}
-
-func MuxRegisterPath(mux *http.ServeMux, method string, pathPrefix string, pathSuffix string, handler func(http.ResponseWriter, *http.Request)) {
-	pattern := fmt.Sprintf("%s %s%s", method, pathPrefix, pathSuffix)
-	mux.HandleFunc(pattern, handler)
-	mux.HandleFunc(pattern+"/", handler)
 }

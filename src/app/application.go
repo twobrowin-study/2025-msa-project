@@ -21,7 +21,7 @@ func Run(deps *deps.Deps) {
 	defer cancel()
 
 	router := newRouter(deps)
-	handler := loggingMiddleware(router, deps)
+	handler := deps.Log.Middleware(router)
 
 	server := &http.Server{
 		Addr:         deps.Config.Server.Host + ":" + deps.Config.Server.Port,
